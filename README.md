@@ -1,6 +1,57 @@
-# WorkLife AI Coach
+# 💼 WorkLife AI Coach
+
+> AI-powered career coaching platform helping young professionals get unstuck in their careers
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
 
 An AI-powered career coaching platform that provides personalized guidance to young professionals navigating career confusion, skill development, and workplace challenges.
+
+## 🌟 New Features
+
+### 🔐 Authentication System
+- Google OAuth login
+- Email/password registration
+- Secure session management
+
+### 💳 Premium Subscription
+- **Free Tier**: 10 messages
+- **Premium**: Unlimited conversations
+- Monthly ($9.99) or Yearly ($99.99)
+
+### 🌍 Multi-Language Support
+10 languages: English, Spanish, French, German, Chinese, Japanese, Portuguese, Arabic, Hindi, Russian
+
+### 💬 Chat History
+- Multiple conversations
+- Expandable sidebar
+- Auto-save & export
+
+### 🎨 Minimalist UI
+- Clean design
+- Responsive layout
+- Smooth animations
+
+## 🚀 Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Start server
+npm start
+
+# Open in browser
+open http://localhost:3000/auth.html
+```
+
+## 📚 Documentation
+
+- [Quick Start Guide](QUICK_START.md) - Get started in 5 minutes
+- [New Features Guide](NEW_FEATURES_GUIDE.md) - Authentication, payments, i18n
+- [UI Design Spec](worklife-chat-ui-design.md) - Complete design system
+- [Coach Behavior](worklife-ai-coach-behavior.md) - AI personality guide
 
 ## Features
 

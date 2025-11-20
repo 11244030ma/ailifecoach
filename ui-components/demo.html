@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkLife AI Coach - Chat Interface Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Import the complete CSS */
+    :root {
+      --primary-blue: #4A90E2;
+      --primary-blue-dark: #357ABD;
+      --primary-blue-light: #E8F4FD;
+      --accent-green: #6BCF9F;
+      --accent-green-light: #E8F8F2;
+      --warm-coral: #FF8B7B;
+      --neutral-900: #1A1A1A;
+      --neutral-700: #4A4A4A;
+      --neutral-500: #8E8E8E;
+      --neutral-300: #D4D4D4;
+      --neutral-100: #F5F5F5;
+      --neutral-50: #FAFAFA;
+      --white: #FFFFFF;
+      --bg-user: #4A90E2;
+      --bg-ai: #FFFFFF;
+      --bg-chat: #FAFAFA;
+      --bg-input: #FFFFFF;
+      --border-light: #E8E8E8;
+      --shadow-soft: rgba(0, 0, 0, 0.08);
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 20px;
+      --text-2xl: 24px;
+      --weight-normal: 400;
+      --weight-medium: 500;
+      --weight-semibold: 600;
+      --weight-bold: 700;
+      --leading-tight: 1.25;
+      --leading-normal: 1.5;
+      --leading-relaxed: 1.75;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 12px;
+      --space-lg: 16px;
+      --space-xl: 24px;
+      --space-2xl: 32px;
+      --space-3xl: 48px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+      --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 800px;
+      height: 90vh;
+      max-height: 900px;
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      height: 60px;
+      padding: 0 var(--space-xl);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--white);
+      border-bottom: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .chat-header-title {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-semibold);
+      color: var(--neutral-900);
+    }
+
+    .chat-header-subtitle {
+      font-size: var(--text-sm);
+      color: var(--neutral-500);
+      margin-top: 2px;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      background: var(--bg-chat);
+      scroll-behavior: smooth;
+    }
+
+    .chat-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-body::-webkit-scrollbar-thumb {
+      background: var(--neutral-300);
+      border-radius: 3px;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: var(--space-md);
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message-user {
+      align-items: flex-end;
+    }
+
+    .message-ai {
+      align-items: flex-start;
+    }
+
+    .message-content {
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-base);
+      max-width: 70%;
+      word-wrap: break-word;
+    }
+
+    .message-user .message-content {
+      background: var(--bg-user);
+      color: var(--white);
+      border-radius: 18px 18px 4px 18px;
+      box-shadow: var(--shadow-md);
+      line-height: var(--leading-normal);
+    }
+
+    .message-ai .message-content {
+      background: var(--bg-ai);
+      color: var(--neutral-900);
+      border-radius: 18px 18px 18px 4px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      line-height: var(--leading-relaxed);
+      max-width: 75%;
+    }
+
+    .message-timestamp {
+      font-size: var(--text-xs);
+      color: var(--neutral-500);
+      margin-top: var(--space-xs);
+      padding: 0 var(--space-xs);
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--white);
+      border-radius: 18px 18px 18px 4px;
+      max-width: 80px;
+      margin-bottom: var(--space-md);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--neutral-500);
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+      30% {
+        transform: translateY(-8px);
+        opacity: 1;
+      }
+    }
+
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin: var(--space-lg) 0 var(--space-xl) 0;
+    }
+
+    .quick-reply-button {
+      background: var(--white);
+      border: 1px solid var(--primary-blue);
+      color: var(--primary-blue);
+      padding: 10px var(--space-lg);
+      border-radius: 20px;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-primary);
+    }
+
+    .quick-reply-button:hover {
+      background: var(--primary-blue);
+      color: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    }
+
+    .input-container {
+      padding: var(--space-lg) var(--space-xl);
+      background: var(--white);
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: flex-end;
+      gap: var(--space-md);
+      flex-shrink: 0;
+    }
+
+    .input-wrapper {
+      flex: 1;
+    }
+
+    .input-field {
+      width: 100%;
+      min-height: 44px;
+      max-height: 120px;
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-base);
+      font-family: var(--font-primary);
+      color: var(--neutral-900);
+      background: var(--neutral-50);
+      border: 1px solid var(--border-light);
+      border-radius: 22px;
+      resize: none;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-field:focus {
+      background: var(--white);
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px var(--primary-blue-light);
+    }
+
+    .send-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--primary-blue);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .send-button:hover {
+      background: var(--primary-blue-dark);
+      transform: scale(1.05);
+    }
+
+    .send-button:disabled {
+      background: var(--neutral-300);
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <!-- Header -->
+    <div class="chat-header">
+      <div>
+        <div class="chat-header-title">WorkLife Coach</div>
+        <div class="chat-header-subtitle">Here to help you get unstuck</div>
+      </div>
+    </div>
+
+    <!-- Chat Body -->
+    <div class="chat-body" id="chatBody">
+      <!-- AI Message -->
+      <div class="message message-ai">
+        <div class="message-content">
+          Hi! I'm your WorkLife coach. I'm here to help you get unstuck in your career—whether you're figuring out what to learn next, thinking about switching fields, or just feeling lost about where you're headed. Let's talk through it together.
+        </div>
+        <div class="message-timestamp">10:00 AM</div>
+      </div>
+
+      <!-- User Message -->
+      <div class="message message-user">
+        <div class="message-content">
+          I feel stuck in my current job. I don't know if I should stay or leave.
+        </div>
+        <div class="message-timestamp">10:02 AM</div>
+      </div>
+
+      <!-- AI Message -->
+      <div class="message message-ai">
+        <div class="message-content">
+          That feeling of being stuck is really common, and it doesn't mean you're behind—it means you're being honest with yourself.<br><br>
+          Let me ask: what's making you want to leave? Is it the work itself, the environment, the growth opportunities, or something else?
+        </div>
+        <div class="message-timestamp">10:02 AM</div>
+      </div>
+
+      <!-- User Message -->
+      <div class="message message-user">
+        <div class="message-content">
+          It's the growth opportunities. I've been in the same role for 3 years and there's no path up.
+        </div>
+        <div class="message-timestamp">10:03 AM</div>
+      </div>
+
+      <!-- AI Message -->
+      <div class="message message-ai">
+        <div class="message-content">
+          Okay, so it's not that the work is terrible—it's that you've hit a ceiling. That's fixable, but it requires being strategic.<br><br>
+          <strong>This week:</strong><br>
+          • Update your LinkedIn with your current skills<br>
+          • Identify 3-5 companies known for promoting from within<br><br>
+          <strong>This month:</strong><br>
+          • Apply to 5-10 roles that are a step up<br>
+          • Practice talking about your accomplishments<br><br>
+          What feels like the hardest part of this plan?
+        </div>
+        <div class="message-timestamp">10:04 AM</div>
+      </div>
+
+      <!-- Quick Replies -->
+      <div class="quick-replies">
+        <button class="quick-reply-button" onclick="sendQuickReply('Tell me more')">Tell me more</button>
+        <button class="quick-reply-button" onclick="sendQuickReply('What should I do first?')">What should I do first?</button>
+        <button class="quick-reply-button" onclick="sendQuickReply('I need help with confidence')">I need help with confidence</button>
+      </div>
+
+      <!-- Typing Indicator (hidden by default) -->
+      <div class="typing-indicator" id="typingIndicator" style="display: none;">
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+        <span class="typing-dot"></span>
+      </div>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="input-container">
+      <div class="input-wrapper">
+        <textarea 
+          class="input-field" 
+          id="messageInput"
+          placeholder="Type your message..."
+          rows="1"
+        ></textarea>
+      </div>
+      <button class="send-button" id="sendButton" onclick="sendMessage()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M2 10L18 2L10 18L8 11L2 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const chatBody = document.getElementById('chatBody');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+
+    // API Configuration
+    const API_BASE = window.location.origin;
+    let sessionId = null;
+    let userId = null;
+
+    // Initialize session on page load
+    async function initializeSession() {
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/start`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: localStorage.getItem('userId') || null
+          })
+        });
+
+        const data = await response.json();
+        sessionId = data.sessionId;
+        userId = data.userId;
+        localStorage.setItem('userId', userId);
+        
+        console.log('✅ Session initialized:', sessionId);
+      } catch (error) {
+        console.error('❌ Failed to initialize session:', error);
+        // Continue with offline mode
+      }
+    }
+
+    // Auto-resize textarea
+    messageInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+    });
+
+    // Send on Enter (Shift+Enter for new line)
+    messageInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      // Add user message
+      addMessage(message, 'user');
+      messageInput.value = '';
+      messageInput.style.height = 'auto';
+
+      // Show typing indicator
+      typingIndicator.style.display = 'flex';
+      scrollToBottom();
+
+      try {
+        // Send to API
+        const response = await fetch(`${API_BASE}/api/chat/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            sessionId,
+            message
+          })
+        });
+
+        const data = await response.json();
+        
+        // Hide typing indicator and show response
+        typingIndicator.style.display = 'none';
+        addMessage(data.message, 'ai');
+      } catch (error) {
+        console.error('Error sending message:', error);
+        
+        // Fallback response
+        typingIndicator.style.display = 'none';
+        addMessage('I understand where you\'re coming from. Let me help you work through this.', 'ai');
+      }
+    }
+
+    async function sendQuickReply(text) {
+      addMessage(text, 'user');
+      
+      // Show typing indicator
+      typingIndicator.style.display = 'flex';
+      scrollToBottom();
+
+      try {
+        // Send to API
+        const response = await fetch(`${API_BASE}/api/chat/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            sessionId,
+            message: text
+          })
+        });
+
+        const data = await response.json();
+        
+        // Hide typing indicator and show response
+        typingIndicator.style.display = 'none';
+        addMessage(data.message, 'ai');
+      } catch (error) {
+        console.error('Error sending quick reply:', error);
+        
+        // Fallback response
+        typingIndicator.style.display = 'none';
+        addMessage('Great question! Let me break that down for you...', 'ai');
+      }
+    }
+
+    function addMessage(content, type) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message message-${type}`;
+      
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      
+      // Convert line breaks to <br> tags
+      const formattedContent = content.replace(/\n/g, '<br>');
+      
+      messageDiv.innerHTML = `
+        <div class="message-content">${formattedContent}</div>
+        <div class="message-timestamp">${time}</div>
+      `;
+      
+      chatBody.insertBefore(messageDiv, typingIndicator);
+      scrollToBottom();
+    }
+
+    function scrollToBottom() {
+      chatBody.scrollTo({
+        top: chatBody.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+
+    // Initialize session when page loads
+    initializeSession();
+
+    // Initial scroll
+    scrollToBottom();
+  </script>
+</body>
+</html>

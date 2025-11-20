@@ -79,9 +79,122 @@
       background: #FAFAFA;
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--white);
+      border-right: 1px solid var(--neutral-200);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      z-index: 100;
+      transform: translateX(-100%);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-header {
       padding: 20px;
+      border-bottom: 1px solid var(--neutral-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sidebar-title {
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--neutral-900);
+    }
+
+    .close-sidebar {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--neutral-500);
+      padding: 4px;
+    }
+
+    .new-chat-btn {
+      margin: 16px;
+      padding: 12px;
+      background: var(--neutral-900);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .new-chat-btn:hover {
+      background: var(--neutral-800);
+    }
+
+    .chat-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .chat-item {
+      padding: 12px 16px;
+      margin-bottom: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .chat-item:hover {
+      background: var(--neutral-50);
+    }
+
+    .chat-item.active {
+      background: var(--neutral-100);
+    }
+
+    .chat-item-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--neutral-900);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-item-preview {
+      font-size: 12px;
+      color: var(--neutral-500);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      margin-left: 0;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-open {
+      margin-left: 280px;
     }
 
     .chat-container {
@@ -107,6 +220,27 @@
       background: var(--white);
       border-bottom: 1px solid var(--neutral-200);
       flex-shrink: 0;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--neutral-700);
+      padding: 8px;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .menu-button:hover {
+      background: var(--neutral-100);
     }
 
     .chat-header-title {
@@ -393,32 +527,60 @@
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <!-- Header -->
-    <div class="chat-header">
-      <div>
-        <div class="chat-header-title" id="appName">WorkLife Coach</div>
-        <div class="chat-header-subtitle" id="appSubtitle">Here to help you get unstuck</div>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Chat History</span>
+      <button class="close-sidebar" onclick="toggleSidebar()">×</button>
+    </div>
+    <button class="new-chat-btn" onclick="createNewChat()">+ New Chat</button>
+    <div class="chat-list" id="chatList">
+      <div class="chat-item active">
+        <div class="chat-item-title">Career Guidance</div>
+        <div class="chat-item-preview">I feel stuck in my current job...</div>
       </div>
-      <div class="language-selector">
-        <button class="language-button" id="languageButton" onclick="toggleLanguageDropdown()">
-          <span id="currentLanguage">🌐 EN</span>
-          <span>▼</span>
-        </button>
-        <div class="language-dropdown" id="languageDropdown">
-          <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
-          <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
-          <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
-          <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
-          <div class="language-option" onclick="changeLanguage('zh')">🇨🇳 中文</div>
-          <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
-          <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
-          <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
-          <div class="language-option" onclick="changeLanguage('hi')">🇮🇳 हिन्दी</div>
-          <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
-        </div>
+      <div class="chat-item">
+        <div class="chat-item-title">Skill Development</div>
+        <div class="chat-item-preview">What skills should I learn?</div>
+      </div>
+      <div class="chat-item">
+        <div class="chat-item-title">Career Transition</div>
+        <div class="chat-item-preview">I want to switch careers...</div>
       </div>
     </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="chat-container">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="header-left">
+          <button class="menu-button" onclick="toggleSidebar()">☰</button>
+          <div>
+            <div class="chat-header-title" id="appName">WorkLife Coach</div>
+            <div class="chat-header-subtitle" id="appSubtitle">Here to help you get unstuck</div>
+          </div>
+        </div>
+        <div class="language-selector">
+          <button class="language-button" id="languageButton" onclick="toggleLanguageDropdown()">
+            <span id="currentLanguage">🌐 EN</span>
+            <span>▼</span>
+          </button>
+          <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" onclick="changeLanguage('en')">🇬🇧 English</div>
+            <div class="language-option" onclick="changeLanguage('es')">🇪🇸 Español</div>
+            <div class="language-option" onclick="changeLanguage('fr')">🇫🇷 Français</div>
+            <div class="language-option" onclick="changeLanguage('de')">🇩🇪 Deutsch</div>
+            <div class="language-option" onclick="changeLanguage('zh')">🇨🇳 中文</div>
+            <div class="language-option" onclick="changeLanguage('ja')">🇯🇵 日本語</div>
+            <div class="language-option" onclick="changeLanguage('pt')">🇵🇹 Português</div>
+            <div class="language-option" onclick="changeLanguage('ar')">🇸🇦 العربية</div>
+            <div class="language-option" onclick="changeLanguage('hi')">🇮🇳 हिन्दी</div>
+            <div class="language-option" onclick="changeLanguage('ru')">🇷🇺 Русский</div>
+          </div>
+        </div>
+      </div>
 
     <!-- Chat Body -->
     <div class="chat-body" id="chatBody">
@@ -500,6 +662,7 @@
           <path d="M2 10L18 2L10 18L8 11L2 10Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="currentColor"/>
         </svg>
       </button>
+    </div>
     </div>
   </div>
 
@@ -671,7 +834,42 @@
     // Initial scroll
     scrollToBottom();
 
-    // Add language dropdown toggle
+    // Sidebar functions
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      sidebar.classList.toggle('open');
+      mainContent.classList.toggle('sidebar-open');
+    }
+
+    function createNewChat() {
+      const chatBody = document.getElementById('chatBody');
+      chatBody.innerHTML = `
+        <div class="message message-ai">
+          <div class="message-content">
+            Hi! I'm your WorkLife coach. How can I help you today?
+          </div>
+          <div class="message-timestamp">${new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</div>
+        </div>
+      `;
+      
+      const chatList = document.getElementById('chatList');
+      const newChat = document.createElement('div');
+      newChat.className = 'chat-item active';
+      newChat.innerHTML = `
+        <div class="chat-item-title">New Conversation</div>
+        <div class="chat-item-preview">Just started...</div>
+      `;
+      
+      chatList.querySelectorAll('.chat-item').forEach(item => item.classList.remove('active'));
+      chatList.insertBefore(newChat, chatList.firstChild);
+      
+      if (window.innerWidth < 768) {
+        toggleSidebar();
+      }
+    }
+
+    // Language dropdown toggle
     function toggleLanguageDropdown() {
       const dropdown = document.getElementById('languageDropdown');
       dropdown.classList.toggle('show');
@@ -679,15 +877,25 @@
 
     function changeLanguage(lang) {
       localStorage.setItem('language', lang);
+      toggleLanguageDropdown();
       location.reload();
     }
 
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.language-selector')) {
-        document.getElementById('languageDropdown').classList.remove('show');
+        document.getElementById('languageDropdown')?.classList.remove('show');
       }
     });
+
+    // Load current language
+    const currentLang = localStorage.getItem('language') || 'en';
+    const langMap = {
+      'en': '🌐 EN', 'es': '🇪🇸 ES', 'fr': '🇫🇷 FR', 'de': '🇩🇪 DE',
+      'zh': '🇨🇳 ZH', 'ja': '🇯🇵 JA', 'pt': '🇵🇹 PT', 'ar': '🇸🇦 AR',
+      'hi': '🇮🇳 HI', 'ru': '🇷🇺 RU'
+    };
+    document.getElementById('currentLanguage').textContent = langMap[currentLang] || '🌐 EN';
   </script>
 </body>
 </html>

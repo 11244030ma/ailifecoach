@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upgrade to Premium - WorkLife AI Coach</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: #6B7280;
+    }
+
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .pricing-card {
+      background: white;
+      border: 2px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.3s;
+    }
+
+    .pricing-card:hover {
+      border-color: #1A1A1A;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .pricing-card.popular {
+      border-color: #1A1A1A;
+      position: relative;
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1A1A1A;
+      color: white;
+      padding: 4px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .plan-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-size: 48px;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 4px;
+    }
+
+    .plan-price span {
+      font-size: 18px;
+      color: #6B7280;
+      font-weight: 400;
+    }
+
+    .plan-savings {
+      color: #059669;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .features {
+      list-style: none;
+      margin-bottom: 32px;
+    }
+
+    .features li {
+      padding: 12px 0;
+      color: #374151;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .features li::before {
+      content: '✓';
+      color: #059669;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: #1A1A1A;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2D2D2D;
+      transform: scale(1.02);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #1A1A1A;
+      border: 2px solid #1A1A1A;
+    }
+
+    .btn-secondary:hover {
+      background: #F9FAFB;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    .back-link a {
+      color: #6B7280;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .back-link a:hover {
+      color: #1A1A1A;
+      text-decoration: underline;
+    }
+
+    .payment-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .payment-modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .payment-method {
+      padding: 16px;
+      border: 2px solid #E5E7EB;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .payment-method:hover {
+      border-color: #1A1A1A;
+      background: #F9FAFB;
+    }
+
+    .close-modal {
+      margin-top: 16px;
+      background: #F3F4F6;
+      color: #374151;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Upgrade to Premium</h1>
+      <p class="subtitle">Unlock unlimited conversations and advanced features</p>
+    </div>
+
+    <div class="pricing-cards">
+      <!-- Monthly Plan -->
+      <div class="pricing-card">
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price">$9.99<span>/month</span></div>
+        <div class="plan-savings" style="visibility: hidden;">-</div>
+        <ul class="features">
+          <li>Unlimited conversations</li>
+          <li>Priority support</li>
+          <li>Advanced career insights</li>
+          <li>Personalized growth plans</li>
+          <li>Export chat history</li>
+        </ul>
+        <button class="btn btn-secondary" onclick="showPaymentModal('monthly')">Choose Monthly</button>
+      </div>
+
+      <!-- Yearly Plan (Popular) -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">BEST VALUE</div>
+        <div class="plan-name">Yearly</div>
+        <div class="plan-price">$99.99<span>/year</span></div>
+        <div class="plan-savings">Save $20 (17% off)</div>
+        <ul class="features">
+          <li>Unlimited conversations</li>
+          <li>Priority support</li>
+          <li>Advanced career insights</li>
+          <li>Personalized growth plans</li>
+          <li>Export chat history</li>
+          <li>2 months free</li>
+        </ul>
+        <button class="btn btn-primary" onclick="showPaymentModal('yearly')">Choose Yearly</button>
+      </div>
+    </div>
+
+    <div class="back-link">
+      <a href="demo.html">← Back to chat</a>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="payment-modal" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">Choose Payment Method</div>
+      <div class="payment-methods">
+        <div class="payment-method" onclick="processPayment('stripe')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#635BFF">
+            <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.594-7.305h.003z"/>
+          </svg>
+          <span>Credit Card (Stripe)</span>
+        </div>
+        <div class="payment-method" onclick="processPayment('paypal')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="#00457C">
+            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h-.506l-.24 1.516a.56.56 0 0 0 .554.647h3.882c.46 0 .85-.334.922-.788.06-.26.76-4.852.816-5.09a.932.932 0 0 1 .923-.788h.58c3.76 0 6.705-1.528 7.565-5.946.36-1.847.174-3.388-.777-4.471z"/>
+          </svg>
+          <span>PayPal</span>
+        </div>
+      </div>
+      <button class="btn close-modal" onclick="closePaymentModal()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedPlan = '';
+
+    function showPaymentModal(plan) {
+      selectedPlan = plan;
+      document.getElementById('paymentModal').classList.add('show');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('show');
+    }
+
+    async function processPayment(method) {
+      // Mock payment processing
+      closePaymentModal();
+      
+      // Show loading
+      alert('Processing payment...');
+      
+      // Simulate payment delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Update user to premium
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      user.isPremium = true;
+      user.freeMessagesRemaining = Infinity;
+      localStorage.setItem('user', JSON.stringify(user));
+      
+      alert('Payment successful! You are now a premium member.');
+      window.location.href = 'demo.html';
+    }
+
+    // Check if user is logged in
+    if (!localStorage.getItem('user')) {
+      window.location.href = 'auth.html';
+    }
+  </script>
+</body>
+</html>

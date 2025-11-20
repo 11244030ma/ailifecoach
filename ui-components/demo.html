@@ -653,11 +653,41 @@
       });
     }
 
+    // Check authentication or guest mode
+    const user = localStorage.getItem('user');
+    const guestMode = localStorage.getItem('guestMode');
+    
+    if (!user && !guestMode) {
+      // Redirect to auth if not logged in and not guest
+      window.location.href = 'auth.html';
+    }
+
     // Initialize session when page loads
-    initializeSession();
+    initializeSession().catch(err => {
+      console.error('Session init error:', err);
+      // Continue anyway with fallback
+    });
 
     // Initial scroll
     scrollToBottom();
+
+    // Add language dropdown toggle
+    function toggleLanguageDropdown() {
+      const dropdown = document.getElementById('languageDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    function changeLanguage(lang) {
+      localStorage.setItem('language', lang);
+      location.reload();
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.language-selector')) {
+        document.getElementById('languageDropdown').classList.remove('show');
+      }
+    });
   </script>
 </body>
 </html>

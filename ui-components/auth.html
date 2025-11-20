@@ -8,9 +8,17 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
+    :root {
+      --navy-blue: #1A2A40;
+      --warm-gold: #F6C667;
+      --light-bg: #FAFAF7;
+      --text-dark: #1A1A1A;
+      --text-gray: #4A4A4A;
+    }
+    
     body {
       font-family: 'Inter', sans-serif;
-      background: #FAFAFA;
+      background: linear-gradient(135deg, #FDFDFB 0%, #FAFAF7 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -36,7 +44,7 @@
     .logo-icon {
       width: 64px;
       height: 64px;
-      background: #1A1A1A;
+      background: var(--navy-blue);
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -101,12 +109,12 @@
     }
 
     .btn-primary {
-      background: #1A1A1A;
-      color: white;
+      background: var(--warm-gold);
+      color: var(--navy-blue);
     }
 
     .btn-primary:hover {
-      background: #2D2D2D;
+      background: #F4B84E;
     }
 
     .btn-google {
@@ -302,6 +310,12 @@
     if (localStorage.getItem('user')) {
       window.location.href = 'demo.html';
     }
+
+    // Add back button
+    const backLink = document.createElement('div');
+    backLink.style.cssText = 'text-align: center; margin-top: 20px;';
+    backLink.innerHTML = '<a href="index.html" style="color: var(--text-gray); text-decoration: none; font-size: 14px;">← Back to home</a>';
+    document.querySelector('.auth-container').appendChild(backLink);
   </script>
 </body>
 </html>

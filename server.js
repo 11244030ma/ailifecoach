@@ -163,10 +163,10 @@ app.get('/api/chat/history/:sessionId', async (req, res) => {
 
 /**
  * GET /
- * Serve the main chat interface
+ * Serve the landing page
  */
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'ui-components', 'demo.html'));
+  res.sendFile(path.join(__dirname, 'ui-components', 'index.html'));
 });
 
 /**

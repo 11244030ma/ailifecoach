@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Work Life AI Coach - Career Clarity & Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy-blue: #1A2A40;
+      --warm-gold: #F6C667;
+      --light-bg: #FAFAF7;
+      --text-dark: #1A1A1A;
+      --text-gray: #4A4A4A;
+      --soft-gray: #E8E8E8;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #FDFDFB 0%, #FAFAF7 100%);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(246, 198, 103, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      font-weight: 600;
+      color: var(--navy-blue);
+      line-height: 1.2;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-subheadline {
+      font-size: 20px;
+      color: var(--text-gray);
+      margin-bottom: 40px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--warm-gold);
+      color: var(--navy-blue);
+      box-shadow: 0 4px 16px rgba(246, 198, 103, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #F4B84E;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(246, 198, 103, 0.4);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--navy-blue);
+      border: 2px solid var(--navy-blue);
+    }
+
+    .btn-secondary:hover {
+      background: var(--navy-blue);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1s ease-out 0.3s both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .logo-container {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-circle {
+      width: 300px;
+      height: 300px;
+      background: var(--navy-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 20px 60px rgba(26, 42, 64, 0.2);
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .logo-icon {
+      width: 180px;
+      height: 180px;
+      position: relative;
+    }
+
+    /* Decorative elements */
+    .logo-circle::before {
+      content: '';
+      position: absolute;
+      width: 120%;
+      height: 120%;
+      border: 2px solid var(--warm-gold);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.3; }
+      50% { transform: scale(1.1); opacity: 0.1; }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 968px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+        text-align: center;
+      }
+
+      .hero-headline {
+        font-size: 42px;
+      }
+
+      .hero-subheadline {
+        font-size: 18px;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+      }
+
+      .logo-container {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+      }
+
+      .logo-circle {
+        width: 240px;
+        height: 240px;
+      }
+
+      .logo-icon {
+        width: 140px;
+        height: 140px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-headline {
+        font-size: 36px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    /* Smooth page transitions */
+    .page-transition {
+      animation: pageSlideIn 0.5s ease-out;
+    }
+
+    @keyframes pageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="container">
+      <!-- Left Side: Content -->
+      <div class="hero-content">
+        <h1 class="hero-headline">Work shouldn't feel this stressful</h1>
+        <p class="hero-subheadline">We're here to help you regain clarity.</p>
+        
+        <div class="cta-buttons">
+          <button class="btn btn-primary" onclick="navigateToRegister()">Register Now</button>
+          <button class="btn btn-secondary" onclick="navigateToGuestMode()">Try Guest Mode</button>
+        </div>
+      </div>
+
+      <!-- Right Side: Logo -->
+      <div class="hero-visual">
+        <div class="logo-container">
+          <div class="logo-circle">
+            <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Gear/Cog (representing work/systems) -->
+              <g transform="translate(40, 50)">
+                <circle cx="40" cy="40" r="30" fill="none" stroke="#F6C667" stroke-width="3"/>
+                <circle cx="40" cy="40" r="15" fill="#F6C667"/>
+                <!-- Gear teeth -->
+                <rect x="37" y="5" width="6" height="10" fill="#F6C667" rx="2"/>
+                <rect x="37" y="65" width="6" height="10" fill="#F6C667" rx="2"/>
+                <rect x="5" y="37" width="10" height="6" fill="#F6C667" rx="2"/>
+                <rect x="65" y="37" width="10" height="6" fill="#F6C667" rx="2"/>
+              </g>
+              
+              <!-- Leaf (representing growth/nature/balance) -->
+              <g transform="translate(100, 80)">
+                <path d="M 50 10 Q 70 30, 50 60 Q 30 30, 50 10 Z" fill="#6BCF9F" opacity="0.9"/>
+                <path d="M 50 10 L 50 60" stroke="#4A9B7F" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 50 25 Q 60 30, 55 40" stroke="#4A9B7F" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              </g>
+              
+              <!-- Connecting element -->
+              <line x1="80" y1="90" x2="100" y2="110" stroke="#F6C667" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function navigateToRegister() {
+      // Smooth transition
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease';
+      
+      setTimeout(() => {
+        window.location.href = 'auth.html';
+      }, 300);
+    }
+
+    function navigateToGuestMode() {
+      // Smooth transition
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease';
+      
+      setTimeout(() => {
+        // Set guest mode flag
+        localStorage.setItem('guestMode', 'true');
+        window.location.href = 'demo.html';
+      }, 300);
+    }
+
+    // Smooth page load
+    window.addEventListener('load', () => {
+      document.body.style.opacity = '1';
+    });
+  </script>
+</body>
+</html>

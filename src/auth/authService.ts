@@ -4,7 +4,7 @@
  */
 
 // Browser API type declarations
-declare const localStorage: Storage;
+declare const localStorage: any;
 declare function btoa(data: string): string;
 
 export interface User {

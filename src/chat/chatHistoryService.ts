@@ -4,7 +4,7 @@
  */
 
 // Browser API type declaration
-declare const localStorage: Storage;
+declare const localStorage: any;
 
 export interface ChatConversation {
   id: string;

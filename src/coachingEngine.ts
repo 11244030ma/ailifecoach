@@ -527,14 +527,14 @@ export class CoachingEngine {
       }
 
       // Check for progress acknowledgment
-      const hasProgress = userProfile && userProfile.progress.completedActions.length > 0;
+      const hasProgress = userProfile ? userProfile.progress.completedActions.length > 0 : false;
 
       // Create response context
       const context: ResponseContext = {
         userProfile: userProfile || undefined,
         intent: intent.type,
         isReturningUser: hasProgress || false,
-        hasProgress
+        hasProgress: hasProgress
       };
 
       // Format recommendations

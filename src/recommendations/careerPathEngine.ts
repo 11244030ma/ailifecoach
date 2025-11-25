@@ -94,7 +94,7 @@ function identifyCandidatePaths(profile: UserProfile): PathCandidate[] {
         requiredSkills: template.requiredSkills,
         growthPotential: template.growthPotential,
         matchingInterests,
-        matchingSkills,
+        matchingSkills: matchingSkills.map(s => s.name),
       });
     }
   }

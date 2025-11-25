@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debug Chat</title>
+  <style>
+    body { font-family: Arial; padding: 20px; max-width: 800px; margin: 0 auto; }
+    .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    #log { background: #f5f5f5; padding: 10px; height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px; }
+    input { padding: 10px; width: 300px; }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Chat Debug Tool</h1>
+  
+  <div class="section">
+    <h3>Step 1: Test Server Connection</h3>
+    <button onclick="testServer()">Test Server</button>
+    <div id="serverStatus"></div>
+  </div>
+
+  <div class="section">
+    <h3>Step 2: Initialize Session</h3>
+    <button onclick="testSession()">Start Session</button>
+    <div id="sessionStatus"></div>
+  </div>
+
+  <div class="section">
+    <h3>Step 3: Send Message</h3>
+    <input type="text" id="testMessage" placeholder="Type a test message" value="I feel stuck">
+    <button onclick="testMessage()">Send Test Message</button>
+    <div id="messageStatus"></div>
+  </div>
+
+  <div class="section">
+    <h3>Console Log</h3>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let sessionId = null;
+
+    function log(message, type = 'info') {
+      const logDiv = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      const color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+      logDiv.innerHTML += `<div style="color: ${color}">[${time}] ${message}</div>`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+      console.log(message);
+    }
+
+    async function testServer() {
+      const statusDiv = document.getElementById('serverStatus');
+      statusDiv.innerHTML = 'Testing...';
+      log('Testing server connection...');
+      
+      try {
+        const response = await fetch(`${API_BASE}/health`);
+        const data = await response.json();
+        
+        statusDiv.innerHTML = `<span class="success">✅ Server is running!</span><br>
+          Status: ${data.status}<br>
+          Engine: ${data.coachingEngine}`;
+        log(`Server OK: ${JSON.stringify(data)}`, 'success');
+      } catch (error) {
+        statusDiv.innerHTML = `<span class="error">❌ Server not responding</span><br>${error.message}`;
+        log(`Server error: ${error.message}`, 'error');
+      }
+    }
+
+    async function testSession() {
+      const statusDiv = document.getElementById('sessionStatus');
+      statusDiv.innerHTML = 'Starting session...';
+      log('Starting session...');
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/start`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: 'debug_user' })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        sessionId = data.sessionId;
+        
+        statusDiv.innerHTML = `<span class="success">✅ Session started!</span><br>
+          Session ID: ${sessionId}<br>
+          User ID: ${data.userId}`;
+        log(`Session started: ${sessionId}`, 'success');
+      } catch (error) {
+        statusDiv.innerHTML = `<span class="error">❌ Session failed</span><br>${error.message}`;
+        log(`Session error: ${error.message}`, 'error');
+      }
+    }
+
+    async function testMessage() {
+      const statusDiv = document.getElementById('messageStatus');
+      const message = document.getElementById('testMessage').value;
+      
+      if (!sessionId) {
+        statusDiv.innerHTML = '<span class="error">❌ No session! Start a session first.</span>';
+        log('No session ID', 'error');
+        return;
+      }
+      
+      statusDiv.innerHTML = 'Sending message...';
+      log(`Sending: "${message}"`);
+      
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, message })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        statusDiv.innerHTML = `<span class="success">✅ Response received!</span><br>
+          <div style="background: #f0f0f0; padding: 10px; margin-top: 10px; border-radius: 4px;">
+            ${data.message.replace(/\n/g, '<br>')}
+          </div>`;
+        log(`Response: ${data.message.substring(0, 100)}...`, 'success');
+      } catch (error) {
+        statusDiv.innerHTML = `<span class="error">❌ Message failed</span><br>${error.message}`;
+        log(`Message error: ${error.message}`, 'error');
+      }
+    }
+
+    // Auto-test on load
+    window.onload = () => {
+      log('Debug tool loaded');
+      log('Click "Test Server" to start');
+    };
+  </script>
+</body>
+</html>

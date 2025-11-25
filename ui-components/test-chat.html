@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat Test</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    #messages { border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+    .message { margin: 10px 0; padding: 10px; border-radius: 8px; }
+    .user { background: #007bff; color: white; text-align: right; }
+    .ai { background: #f0f0f0; }
+    #input { width: 70%; padding: 10px; }
+    #send { padding: 10px 20px; }
+  </style>
+</head>
+<body>
+  <h1>Chat Test</h1>
+  <div id="status">Status: Initializing...</div>
+  <div id="messages"></div>
+  <input type="text" id="input" placeholder="Type a message...">
+  <button id="send" onclick="sendMsg()">Send</button>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let sessionId = null;
+
+    async function init() {
+      try {
+        document.getElementById('status').textContent = 'Status: Connecting...';
+        const response = await fetch(`${API_BASE}/api/chat/start`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: 'test_user' })
+        });
+        const data = await response.json();
+        sessionId = data.sessionId;
+        document.getElementById('status').textContent = `Status: Connected (Session: ${sessionId})`;
+        addMessage(data.message, 'ai');
+      } catch (error) {
+        document.getElementById('status').textContent = `Status: Error - ${error.message}`;
+      }
+    }
+
+    async function sendMsg() {
+      const input = document.getElementById('input');
+      const message = input.value.trim();
+      if (!message || !sessionId) return;
+
+      addMessage(message, 'user');
+      input.value = '';
+
+      try {
+        const response = await fetch(`${API_BASE}/api/chat/message`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, message })
+        });
+        const data = await response.json();
+        addMessage(data.message, 'ai');
+      } catch (error) {
+        addMessage(`Error: ${error.message}`, 'ai');
+      }
+    }
+
+    function addMessage(text, type) {
+      const div = document.createElement('div');
+      div.className = `message ${type}`;
+      div.textContent = text;
+      document.getElementById('messages').appendChild(div);
+    }
+
+    document.getElementById('input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMsg();
+    });
+
+    init();
+  </script>
+</body>
+</html>

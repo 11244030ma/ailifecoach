@@ -12,7 +12,7 @@ export interface UserProfile {
     industry?: string;
   };
   careerInfo: {
-    currentPath?: CareerPath;
+    currentPath?: string;
     goals: Goal[];
     interests: string[];
     struggles: Challenge[];

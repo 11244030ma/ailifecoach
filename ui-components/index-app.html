@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkLife AI Coach</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Your personal AI career coach">
+  <meta name="theme-color" content="#1A2A40">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WorkLife">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #E5E7EB;
+      border-top-color: #4A90E2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading">
+    <div class="spinner"></div>
+    <p>Loading WorkLife Coach...</p>
+  </div>
+
+  <script>
+    // Check authentication and subscription status
+    async function checkAuthAndRedirect() {
+      const user = localStorage.getItem('user');
+      const guestMode = localStorage.getItem('guestMode');
+      
+      // If not logged in and not guest, go to auth
+      if (!user && !guestMode) {
+        window.location.href = '/auth.html';
+        return;
+      }
+
+      // If logged in, check subscription status
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          const messageCount = parseInt(localStorage.getItem('messageCount') || '0');
+          
+          // Check if user needs to upgrade (free tier limit: 10 messages)
+          if (!userData.isPremium && messageCount >= 10) {
+            window.location.href = '/upgrade.html';
+            return;
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      }
+
+      // All good, go to chat
+      window.location.href = '/final-chat.html';
+    }
+
+    // Run check
+    checkAuthAndRedirect();
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker registered'))
+        .catch(err => console.log('❌ SW registration failed:', err));
+    }
+  </script>
+</body>
+</html>

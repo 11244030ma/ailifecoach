@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WorkLife AI Coach</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="description" content="Your personal AI career coach to help you get unstuck">
+  <meta name="theme-color" content="#1A1A1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WorkLife">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- App Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
@@ -391,6 +406,166 @@
     .send-button:active:not(:disabled) {
       transform: scale(0.95);
     }
+
+    /* Profile Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6B7280;
+    }
+
+    .profile-section {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #E5E7EB;
+    }
+
+    .profile-section:last-child {
+      border-bottom: none;
+    }
+
+    .profile-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6B7280;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-label {
+      font-size: 14px;
+      color: #6B7280;
+    }
+
+    .profile-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-free {
+      background: #F3F4F6;
+      color: #6B7280;
+    }
+
+    .badge-premium {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #E5E7EB;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #4A90E2;
+      transition: width 0.3s ease;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: #4A90E2;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #357ABD;
+    }
+
+    .btn-secondary {
+      background: #F3F4F6;
+      color: #111827;
+    }
+
+    .btn-secondary:hover {
+      background: #E5E7EB;
+    }
+
+    .btn-danger {
+      background: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .btn-danger:hover {
+      background: #FECACA;
+    }
   </style>
 </head>
 <body>
@@ -419,6 +594,13 @@
           <h1>WorkLife Coach</h1>
           <p>Here to help you get unstuck</p>
         </div>
+        <button class="menu-button" onclick="openProfile()" title="Profile & Settings">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855"/>
+          </svg>
+        </button>
       </div>
 
       <!-- Chat Body -->
@@ -458,6 +640,58 @@
             <path d="M2 10L18 2L10 18L8 11L2 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
           </svg>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Modal -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Profile & Settings</h2>
+        <button class="close-modal" onclick="closeProfile()">×</button>
+      </div>
+
+      <div class="profile-section">
+        <h3>Account</h3>
+        <div class="profile-info">
+          <div class="profile-row">
+            <span class="profile-label">Email</span>
+            <span class="profile-value" id="userEmail">guest@worklife.ai</span>
+          </div>
+          <div class="profile-row">
+            <span class="profile-label">Plan</span>
+            <span class="badge badge-free" id="userPlan">Free</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Usage</h3>
+        <div class="profile-info">
+          <div class="profile-row">
+            <span class="profile-label">Messages Used</span>
+            <span class="profile-value" id="messageCount">0 / 10</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <h3>Actions</h3>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <button class="btn btn-primary" onclick="goToUpgrade()">
+            ⭐ Upgrade to Premium
+          </button>
+          <button class="btn btn-secondary" onclick="goToAuth()">
+            🔐 Login / Sign Up
+          </button>
+          <button class="btn btn-danger" onclick="logout()">
+            🚪 Logout
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -551,6 +785,9 @@
         
         typingIndicator.classList.remove('show');
         addMessage(data.message, 'ai');
+        
+        // Track message count
+        incrementMessageCount();
       } catch (error) {
         console.error('❌ Error:', error);
         typingIndicator.classList.remove('show');
@@ -648,10 +885,124 @@
       console.log('✅ New chat created');
     }
 
+    // Profile Management
+    function openProfile() {
+      updateProfileDisplay();
+      document.getElementById('profileModal').classList.add('show');
+    }
+
+    function closeProfile() {
+      document.getElementById('profileModal').classList.remove('show');
+    }
+
+    function updateProfileDisplay() {
+      const user = localStorage.getItem('user');
+      const messageCount = parseInt(localStorage.getItem('messageCount') || '0');
+      
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          document.getElementById('userEmail').textContent = userData.email || 'user@worklife.ai';
+          
+          if (userData.isPremium) {
+            document.getElementById('userPlan').textContent = 'Premium ⭐';
+            document.getElementById('userPlan').className = 'badge badge-premium';
+            document.getElementById('messageCount').textContent = `${messageCount} messages`;
+            document.getElementById('progressFill').style.width = '100%';
+          } else {
+            document.getElementById('userPlan').textContent = 'Free';
+            document.getElementById('userPlan').className = 'badge badge-free';
+            document.getElementById('messageCount').textContent = `${messageCount} / 10`;
+            document.getElementById('progressFill').style.width = `${(messageCount / 10) * 100}%`;
+          }
+        } catch (error) {
+          console.error('Error parsing user data:', error);
+        }
+      } else {
+        document.getElementById('userEmail').textContent = 'Guest Mode';
+        document.getElementById('userPlan').textContent = 'Free';
+        document.getElementById('messageCount').textContent = `${messageCount} / 10`;
+        document.getElementById('progressFill').style.width = `${(messageCount / 10) * 100}%`;
+      }
+    }
+
+    function goToUpgrade() {
+      window.location.href = '/upgrade.html';
+    }
+
+    function goToAuth() {
+      window.location.href = '/auth.html';
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('user');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('messageCount');
+        window.location.href = '/auth.html';
+      }
+    }
+
+    // Track message count
+    function incrementMessageCount() {
+      const user = localStorage.getItem('user');
+      let messageCount = parseInt(localStorage.getItem('messageCount') || '0');
+      messageCount++;
+      localStorage.setItem('messageCount', messageCount.toString());
+
+      // Check if user needs to upgrade
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          if (!userData.isPremium && messageCount >= 10) {
+            alert('You\'ve reached your free message limit! Upgrade to Premium for unlimited messages.');
+            window.location.href = '/upgrade.html';
+          }
+        } catch (error) {
+          console.error('Error checking subscription:', error);
+        }
+      } else {
+        // Guest mode
+        if (messageCount >= 10) {
+          alert('You\'ve reached your free message limit! Sign up for more messages.');
+          window.location.href = '/auth.html';
+        }
+      }
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('profileModal').addEventListener('click', (e) => {
+      if (e.target.id === 'profileModal') {
+        closeProfile();
+      }
+    });
+
     // Initialize
     initializeSession();
     scrollToBottom();
     messageInput.focus();
+    updateProfileDisplay();
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('✅ Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            console.log('❌ Service Worker registration failed:', error);
+          });
+      });
+    }
+
+    // Install prompt for PWA
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      console.log('💡 App can be installed!');
+    });
   </script>
 </body>
 </html>

@@ -510,8 +510,10 @@
     }
 
     .badge-premium {
-      background: #FEF3C7;
-      color: #92400E;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: #000000;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
     }
 
     .progress-bar {
@@ -660,8 +662,8 @@
             <span class="profile-value" id="userEmail">guest@worklife.ai</span>
           </div>
           <div class="profile-row">
-            <span class="profile-label">Plan</span>
-            <span class="badge badge-free" id="userPlan">Free</span>
+            <span class="profile-label">Account Type</span>
+            <span class="badge badge-free" id="userPlan">Free Account</span>
           </div>
         </div>
       </div>
@@ -689,7 +691,7 @@
             🔐 Login / Sign Up
           </button>
           <button class="btn btn-danger" onclick="logout()">
-            🚪 Logout
+            🚪 Sign Out
           </button>
         </div>
       </div>
@@ -905,12 +907,12 @@
           document.getElementById('userEmail').textContent = userData.email || 'user@worklife.ai';
           
           if (userData.isPremium) {
-            document.getElementById('userPlan').textContent = 'Premium ⭐';
+            document.getElementById('userPlan').textContent = '⭐ PRO';
             document.getElementById('userPlan').className = 'badge badge-premium';
-            document.getElementById('messageCount').textContent = `${messageCount} messages`;
+            document.getElementById('messageCount').textContent = `${messageCount} messages (Unlimited)`;
             document.getElementById('progressFill').style.width = '100%';
           } else {
-            document.getElementById('userPlan').textContent = 'Free';
+            document.getElementById('userPlan').textContent = 'Free Account';
             document.getElementById('userPlan').className = 'badge badge-free';
             document.getElementById('messageCount').textContent = `${messageCount} / 10`;
             document.getElementById('progressFill').style.width = `${(messageCount / 10) * 100}%`;
@@ -920,7 +922,8 @@
         }
       } else {
         document.getElementById('userEmail').textContent = 'Guest Mode';
-        document.getElementById('userPlan').textContent = 'Free';
+        document.getElementById('userPlan').textContent = 'Free Account';
+        document.getElementById('userPlan').className = 'badge badge-free';
         document.getElementById('messageCount').textContent = `${messageCount} / 10`;
         document.getElementById('progressFill').style.width = `${(messageCount / 10) * 100}%`;
       }
